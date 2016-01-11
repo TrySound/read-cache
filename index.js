@@ -8,6 +8,13 @@ var resolve = path.resolve;
 
 var cache = Object.create(null);
 
+function convert(content, encoding) {
+	if (Buffer.isEncoding(encoding)) {
+		return content.toString(encoding);
+	}
+	return content;
+}
+
 module.exports = function (path, encoding) {
 	path = resolve(path);
 
@@ -15,16 +22,16 @@ module.exports = function (path, encoding) {
 		var item = cache[path];
 
 		if (item && item.mtime.getTime() === stats.mtime.getTime()) {
-			return item.content;
+			return convert(item.content, encoding);
 		}
 
-		return readFile(path, encoding).then(function (data) {
+		return readFile(path).then(function (data) {
 			cache[path] = {
 				mtime: stats.mtime,
 				content: data
 			};
 
-			return data;
+			return convert(data, encoding);
 		});
 	}).catch(function (err) {
 		cache[path] = null;
@@ -40,17 +47,17 @@ module.exports.sync = function (path, encoding) {
 		var item = cache[path];
 
 		if (item && item.mtime.getTime() === stats.mtime.getTime()) {
-			return item.content;
+			return convert(item.content, encoding);
 		}
 
-		var data = fs.readFileSync(path, encoding);
+		var data = fs.readFileSync(path);
 
 		cache[path] = {
 			mtime: stats.mtime,
 			content: data
 		};
 
-		return data;
+		return convert(data, encoding);
 	} catch (err) {
 		cache[path] = null;
 		throw err;
@@ -58,9 +65,12 @@ module.exports.sync = function (path, encoding) {
 
 };
 
-module.exports.get = function (path) {
+module.exports.get = function (path, encoding) {
 	path = resolve(path);
-	return cache[path] ? cache[path].content : null;
+	if (cache[path]) {
+		return convert(cache[path].content, encoding);
+	}
+	return null;
 };
 
 module.exports.clear = function () {

@@ -74,12 +74,22 @@ test.serial('get', t => {
 	return writeFile('fixture', 'data').then(() => {
 		return readCache('fixture', 'utf-8');
 	}).then(() => {
-		t.is(readCache.get('node_modules/../fixture'), 'data');
-		t.is(readCache.get('fixture'), 'data');
+		var contents = [
+			readCache.get('node_modules/../fixture'),
+			readCache.get('fixture', 'utf-8')
+		];
+		t.ok(contents[0] instanceof Buffer);
+		t.is(contents[0].toString(), 'data');
+		t.is(contents[1], 'data');
 		return del('fixture');
 	}).then(() => {
-		t.is(readCache.get('node_modules/../fixture'), 'data');
-		t.is(readCache.get('fixture'), 'data');
+		var contents = [
+			readCache.get('node_modules/../fixture', 'utf-8'),
+			readCache.get('fixture')
+		];
+		t.is(contents[0], 'data');
+		t.ok(contents[1] instanceof Buffer);
+		t.is(contents[1].toString(), 'data');
 	});
 });
 
@@ -88,8 +98,8 @@ test.serial('clear', t => {
 		return readCache('fixture', 'utf-8');
 	}).then(content => {
 		t.is(content, 'data');
-		t.is(readCache.get('fixture'), 'data');
+		t.is(readCache.get('fixture', 'utf-8'), 'data');
 		readCache.clear();
-		t.is(readCache.get('fixture'), null);
+		t.is(readCache.get('fixture', 'utf-8'), null);
 	});
 });

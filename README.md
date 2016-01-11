@@ -32,7 +32,7 @@ Returns a promise that resolves with the file's contents.
 
 Returns the content of the file.
 
-### readCache.get(path)
+### readCache.get(path[, encoding])
 
 Returns the content of cached file or null.
 
