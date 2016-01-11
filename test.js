@@ -49,25 +49,30 @@ test.serial('sync', t => {
 	t.is(readCache.sync('fixture', 'utf-8'), 'data');
 	t.is(readCache.sync('node_modules/../fixture', 'utf-8'), 'data');
 
-	fs.writeFileSync('fixture', 'changed data')
+	return new Promise(function (resolve) {
+		setImmediate(function () {
+			fs.writeFileSync('fixture', 'changed data')
 
-	var contents = [
-		readCache.sync('fixture'),
-		readCache.sync('node_modules/../fixture')
-	];
-	t.ok(contents[0] instanceof Buffer);
-	t.ok(contents[1] instanceof Buffer);
-	t.is(contents[0].toString(), 'changed data');
-	t.is(contents[1].toString(), 'changed data');
+			var contents = [
+				readCache.sync('fixture'),
+				readCache.sync('node_modules/../fixture')
+			];
+			t.ok(contents[0] instanceof Buffer);
+			t.ok(contents[1] instanceof Buffer);
+			t.is(contents[0].toString(), 'changed data');
+			t.is(contents[1].toString(), 'changed data');
 
-	del.sync('fixture');
+			del.sync('fixture');
 
-	try {
-		readCache.sync('fixture');
-		t.fail(`should throw an error if 'fixture' doesn't exist`);
-	} catch (e) {
-		t.is(readCache.get('fixture'), null);
-	}
+			try {
+				readCache.sync('fixture');
+				t.fail(`should throw an error if 'fixture' doesn't exist`);
+			} catch (e) {
+				t.is(readCache.get('fixture'), null);
+			}
+			resolve();
+		});
+	});
 });
 
 test.serial('get', t => {
