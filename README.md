@@ -26,19 +26,19 @@ readCache('foo.js').then(function (contents) {
 
 ### readCache(path[, encoding])
 
-Returns a promise that resolves to a content of the file.
+Returns a promise that resolves with the file's contents.
 
 ### readCache.sync(path[, encoding])
 
-Returns a content of the file.
+Returns the content of the file.
 
 ### readCache.get(path)
 
-Returns a content of cached file or null.
+Returns the content of cached file or null.
 
 ### readCache.clear()
 
-Clears cache with loaded contents.
+Clears the contents of the cache.
 
 
 ## License
