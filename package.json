@@ -1,6 +1,6 @@
 {
   "name": "read-cache",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Reads and caches the entire contents of a file until it is modified",
   "files": [
     "index.js"
