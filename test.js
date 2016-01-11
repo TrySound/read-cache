@@ -50,7 +50,7 @@ test.serial('sync', t => {
 	t.is(readCache.sync('node_modules/../fixture', 'utf-8'), 'data');
 
 	return new Promise(function (resolve) {
-		setImmediate(function () {
+		setTimeout(function () {
 			fs.writeFileSync('fixture', 'changed data')
 
 			var contents = [
@@ -71,7 +71,7 @@ test.serial('sync', t => {
 				t.is(readCache.get('fixture'), null);
 			}
 			resolve();
-		});
+		}, 1000);
 	});
 });
 
