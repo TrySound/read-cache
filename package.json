@@ -25,8 +25,9 @@
   },
   "homepage": "https://github.com/TrySound/read-cache#readme",
   "devDependencies": {
-    "ava": "^0.9.1",
-    "del": "^2.2.0"
+    "ava": "0.9.1",
+    "del": "^2.2.0",
+    "estraverse": "4.2.0"
   },
   "dependencies": {
     "pify": "^2.3.0"
