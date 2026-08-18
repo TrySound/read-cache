@@ -30,6 +30,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Use a legacy-compatible npm
+        run: npm install --global npm@2
+
       - name: Install dependencies
         run: npm install
 
