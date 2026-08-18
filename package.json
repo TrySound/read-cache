@@ -7,7 +7,7 @@
   ],
   "main": "index.js",
   "scripts": {
-    "test": "ava"
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
@@ -24,11 +24,6 @@
     "url": "https://github.com/TrySound/read-cache/issues"
   },
   "homepage": "https://github.com/TrySound/read-cache#readme",
-  "devDependencies": {
-    "ava": "0.9.1",
-    "del": "^2.2.0",
-    "estraverse": "4.2.0"
-  },
   "dependencies": {
     "pify": "^2.3.0"
   }
