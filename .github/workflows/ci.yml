@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Node.js ${{ matrix.node-version }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['4', '5']
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Verify package contents
+        run: npm pack --dry-run
+
+  legacy:
+    name: Node.js 0.12 compatibility
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '0.12'
+
+      - name: Install production dependencies
+        run: npm install --production
+
+      - name: Run compatibility smoke test
+        run: |
+          node -e "var fs = require('fs'); var readCache = require('./'); fs.writeFileSync('fixture', 'data'); if (readCache.sync('fixture', 'utf8') !== 'data') throw new Error('sync read failed'); readCache.clear(); readCache('fixture', 'utf8').then(function (data) { if (data !== 'data') throw new Error('async read failed'); fs.unlinkSync('fixture'); }, function (error) { throw error; });"
