@@ -21,6 +21,8 @@ test.serial('async', t => {
 		t.ok(contents[1] instanceof Buffer);
 		t.is(contents[0].toString(), 'data');
 		t.is(contents[1].toString(), 'data');
+		return new Promise(resolve => setTimeout(resolve, 1000));
+	}).then(() => {
 		return writeFile('fixture', 'changed data');
 	}).then(() => {
 		return Promise.all([
