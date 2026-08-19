@@ -3,12 +3,33 @@
 var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
-var pify = require('pify');
 var readCache = require('./');
 var test = require('./test-runner');
 
-var writeFile = pify(fs.writeFile);
-var unlink = pify(fs.unlink);
+function writeFile(path, data) {
+	return new Promise(function (resolve, reject) {
+		fs.writeFile(path, data, function (err) {
+			if (err) {
+				reject(err);
+				return;
+			}
+			resolve();
+		});
+	});
+}
+
+function unlink(path) {
+	return new Promise(function (resolve, reject) {
+		fs.unlink(path, function (err) {
+			if (err) {
+				reject(err);
+				return;
+			}
+			resolve();
+		});
+	});
+}
+
 var fixture = 'fixture';
 var otherFixture = 'fixture-other';
 var oldTime = new Date(1000000000000);
