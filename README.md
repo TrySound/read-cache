@@ -43,4 +43,4 @@ Clears the contents of the cache.
 
 ## License
 
-MIT © [Bogdan Chadkin](mailto:trysound@yandex.ru)
+MIT © [Bogdan Chadkin](mailto:opensource@trysound.io)

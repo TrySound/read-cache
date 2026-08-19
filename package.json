@@ -18,7 +18,7 @@
     "read",
     "cache"
   ],
-  "author": "Bogdan Chadkin <trysound@yandex.ru>",
+  "author": "Bogdan Chadkin <opensource@trysound.io>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/TrySound/read-cache/issues"
